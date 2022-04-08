@@ -47,6 +47,11 @@ switch nargin
             path_arc = pwd;
         end
     case 3
+        if plotmark
+            plotmark = [1,0];
+        else
+            plotmark = [0,0];
+        end
         if ~isfolder(path_arc)
             path_arc = pwd;
         end
