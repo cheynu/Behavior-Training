@@ -117,7 +117,7 @@ color_Outcome = [cGreen;cRed;cYellow];
 h = figure(4); clf(4);
 set(h, 'unit', 'centimeters', 'position',[1 1 22 18], 'paperpositionmode', 'auto' )
 
-g(1,1) = gramm('x',FPcat_cor,'y',RT_cor,'color',FPcat_cor); % RT-FP 95ci
+g(1,1) = gramm('x',FPcat_cor,'y',RT_cor,'color',FPcat_cor,'subset',RT_cor>=0.1); % RT-FP 95ci
 g(1,1).stat_summary('type', @(x)compute_stat_summary(x,RT_stat), 'geom',{'bar','black_errorbar'},'width',1.5);
 g(1,1).axe_property('ylim', [0.1 0.4], 'XGrid', 'on', 'YGrid', 'on');
 g(1,1).set_names('x','FP(s)', 'y', 'RT(s)');
@@ -126,7 +126,7 @@ g(1,1).set_color_options('map', color_FP, 'n_color',3,'n_lightness',1);
 g(1,1).set_layout_options('Position',[0 0.66 0.4 0.33]);
 g(1,1).no_legend();
 
-g(1,2) = gramm('x',FPcat_cor,'y',RT_cor,'color',FPcat_cor); % RT-FP for each LastFP
+g(1,2) = gramm('x',FPcat_cor,'y',RT_cor,'color',FPcat_cor,'subset',RT_cor>=0.1); % RT-FP for each LastFP
 g(1,2).facet_grid([], LFPcat_cor);
 g(1,2).stat_summary('type', @(x)compute_stat_summary(x,RT_stat),'geom',{'bar','black_errorbar'},'width',0.6,'dodge',0);
 g(1,2).axe_property('ylim', [0.1 0.5], 'XGrid', 'on', 'YGrid', 'on');
@@ -136,7 +136,7 @@ g(1,2).set_color_options('map', color_FP, 'n_color',3,'n_lightness',1);
 g(1,2).set_layout_options('Position',[0.4 0.66 0.6 0.33]);
 g(1,2).no_legend();
 
-g(2,1) = gramm('x',FPcat_cor,'y',RT_cor,'color',FPcat_cor); % RT-FP violin&boxplot
+g(2,1) = gramm('x',FPcat_cor,'y',RT_cor,'color',FPcat_cor,'subset',RT_cor>=0.1); % RT-FP violin&boxplot
 g(2,1).stat_violin('normalization','count','fill','edge','dodge',0);
 g(2,1).stat_boxplot('width',0.4);
 g(2,1).axe_property('ylim', [0 0.6], 'YGrid', 'on');
@@ -160,7 +160,7 @@ g(3,1).set_order_options('x',sort(unique(Outcat),'descend'),'color',unique(FPcat
 g(3,1).set_color_options('map', color_FP, 'n_color',3,'n_lightness',1);
 g(3,1).set_layout_options('Position',[0 0 0.4 0.33]);
 
-g(3,2) = gramm('x',FPcat_cor,'y',RT_cor,'color',FPcat_cor); % RT-FP for each Last FP
+g(3,2) = gramm('x',FPcat_cor,'y',RT_cor,'color',FPcat_cor,'subset',RT_cor>=0.1); % RT-FP for each Last FP
 g(3,2).facet_grid([], LOutcat_cor);
 g(3,2).stat_summary('type', @(x)compute_stat_summary(x,RT_stat),'geom',{'bar','black_errorbar'},'width',0.6,'dodge',0);
 g(3,2).axe_property('ylim', [0.1 0.5], 'XGrid', 'on', 'YGrid', 'on');

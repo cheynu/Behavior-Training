@@ -72,8 +72,6 @@ varNames = {'Name','Date','Task','iTrial','FP',...
 TBT = table(TBTs.Name,TBTs.Date,TBTs.Task,TBTs.iTrial,TBTs.FP,...
     TBTs.Outcome,TBTs.RT,TBTs.PressDur,'VariableNames',varNames);
 
-ind_Cor = find(TBT.Outcome==1);
-
 isTask500 = TBT.Task == "ThreeFPsMixedBpod";
 isTask750 = TBT.Task == "ThreeFPsMixedBpod750_1250_1750";
 isExist3FPs500 = ~isempty(isTask500);
@@ -106,42 +104,44 @@ color_Perf = [cGreen;cRed;cYellow];
 % Trial Number
 g(1,1) = gramm('X', cellstr(SBS.Date), 'Y',SBS.nTrial);
 g(1,1).facet_grid([], cellstr(SBS.Task), 'scale', 'free_x','space','free_x');
-g(1,1).geom_point(); g(1,1).set_point_options('base_size',8);
-g(1,1).geom_line();  g(1,1).set_line_options('base_size',2.5);
+g(1,1).geom_point(); g(1,1).set_point_options('base_size',6);
+g(1,1).geom_line();  g(1,1).set_line_options('base_size',2);
 % g(1,1).axe_property('ylim', [100 500], 'xticklabels', {}, 'XGrid', 'on', 'YGrid', 'on');
 g(1,1).axe_property('xticklabels', {}, 'XGrid', 'on', 'YGrid', 'on');
 g(1,1).set_names('x',{}, 'y', 'Trials','column', '');
 g(1,1).set_color_options('map',colorlist(1,:),'n_color',1,'n_lightness',1);
 g(1,1).set_order_options('column',0,'x',0);
-g(1,1).set_layout_options('Position',[0 0.87 1 0.13]);
+g(1,1).set_layout_options('Position',[0 0.85 1 0.15]);
 
 % Trial Press Ratio
 g(2,1) = gramm('X', cellstr(SBS.Date), 'Y',SBS.rTrial);
 g(2,1).facet_grid([], cellstr(SBS.Task), 'scale', 'free_x','space','free_x', 'column_labels', false);
-g(2,1).geom_point(); g(2,1).set_point_options('base_size',8);
-g(2,1).geom_line();  g(2,1).set_line_options('base_size',2.5);
+g(2,1).geom_point(); g(2,1).set_point_options('base_size',6);
+g(2,1).geom_line();  g(2,1).set_line_options('base_size',2);
 g(2,1).axe_property('ylim', [0 1], 'xticklabels', {}, 'XGrid', 'on', 'YGrid', 'on');
-g(2,1).set_names('x',{}, 'y', 'Trial-press Ratio');
+g(2,1).set_names('x',{}, 'y', 'Trial Ratio');
 g(2,1).set_color_options('map',colorlist(2,:),'n_color',1,'n_lightness',1);
 g(2,1).set_order_options('column',0,'x',0);
-g(2,1).set_layout_options('Position',[0 0.74 1 0.13]);
+g(2,1).set_layout_options('Position',[0 0.74 1 0.11]);
 
 SBSt = struct2table(SBS);
 pSBSt = stack(SBSt,{'Cor','Pre','Late'});
 g(3,1) = gramm('X', cellstr(pSBSt.Date), 'Y',pSBSt.Cor_Pre_Late, 'color',pSBSt.Cor_Pre_Late_Indicator);
 g(3,1).facet_grid([], cellstr(pSBSt.Task), 'scale', 'free_x','space','free_x', 'column_labels', false);
-g(3,1).geom_point(); g(3,1).set_point_options('base_size',8);
-g(3,1).geom_line();  g(3,1).set_line_options('base_size',2.5);
+g(3,1).geom_point(); g(3,1).set_point_options('base_size',6);
+g(3,1).geom_line();  g(3,1).set_line_options('base_size',2);
 g(3,1).axe_property('ylim', [0 1], 'xticklabels', {}, 'XGrid', 'on', 'YGrid', 'on');
 g(3,1).set_names('x',{}, 'y', 'Performance','color','');
 g(3,1).set_color_options('map',color_Perf,'n_color',3,'n_lightness',1);
 g(3,1).set_order_options('column',0,'x',0,'color',{'Cor','Pre','Late'});
-g(3,1).set_layout_options('Position',[0 0.4 1 0.34],'legend_position',[0.09 0.61 0.08 0.11]);
+g(3,1).set_layout_options('Position',[0 0.4 1 0.34],'legend_position',[0.08 0.61 0.08 0.11]);
 
 % RT
-g(4,1) = gramm('X',cellstr(TBT.Date(ind_Cor)),'Y',TBT.RT(ind_Cor));
-g(4,1).facet_grid([], cellstr(TBT.Task(ind_Cor)), 'scale', 'free_x','space','free_x', 'column_labels', false);
+g(4,1) = gramm('X',cellstr(TBT.Date),'Y',TBT.RT,'subset',TBT.Outcome==1 & TBT.RT>=0.1);
+g(4,1).facet_grid([], cellstr(TBT.Task), 'scale', 'free_x','space','free_x', 'column_labels', false);
 g(4,1).stat_summary('type', @(x)compute_stat_summary(x,RT_stat),'geom',{'black_errorbar','point','line'});
+g(4,1).set_point_options('base_size',5);
+g(4,1).set_line_options('base_size',1.5);
 g(4,1).axe_property('ylim', [0 0.7], 'XGrid', 'on', 'YGrid', 'on');
 g(4,1).set_names('x','Date', 'y', 'RT(s)');
 g(4,1).set_color_options('map',colorlist(6,:),'n_color',1,'n_lightness',1);
@@ -151,9 +151,11 @@ g(4,1).set_layout_options('Position',[0 0.2 1 0.2]);
 if isExist3FPs
     g(4,1).axe_property('xticklabels',{});
     g(4,1).set_names('x',{}, 'y', 'RT(s)');
-    g(5,1) = gramm('X',cellstr(TBT_3fp_cor.Date),'Y',TBT_3fp_cor.RT,'color',cellstr(TBT_3fp_cor.FP));
+    g(5,1) = gramm('X',cellstr(TBT_3fp_cor.Date),'Y',TBT_3fp_cor.RT,'color',cellstr(TBT_3fp_cor.FP),'subset',TBT_3fp_cor.RT>=0.1);
     g(5,1).facet_grid([], cellstr(TBT_3fp_cor.Task), 'scale', 'free_x','space','free_x', 'column_labels', false);
     g(5,1).stat_summary('type', @(x)compute_stat_summary(x,RT_stat),'geom',{'errorbar','point'},'dodge',0.6);
+    g(5,1).set_point_options('base_size',3);
+    g(5,1).set_line_options('base_size',1.2);
     g(5,1).axe_property('ylim', [0 0.7], 'XGrid', 'on', 'YGrid', 'on','XTickLabelRotation',90);
     g(5,1).set_names('x',{}, 'y', 'RT_3FPs(s)','color','FP(s)');
     g(5,1).set_color_options('map',color_FP,'n_color',3,'n_lightness',1);
@@ -162,9 +164,13 @@ if isExist3FPs
     g(5,1).no_legend();
 end
 
-h = figure(3);clf(h);
-set(h, 'Name', 'Learning curve', 'unit', 'centimeters', 'position',[1 1 18 22], 'paperpositionmode', 'auto' )
 g.set_title(bt.Subject(1) + ": Learning Curve"+"  ("+RT_stat+")");
+g.set_text_options('base_size',6,'label_scaling',1.3,'legend_scaling',1.1,...
+    'legend_title_scaling',1.2,'facet_scaling',1.4,'big_title_scaling',1.6);
+
+h = figure(3);clf(h);
+set(h, 'Name', 'Learning curve', 'unit', 'centimeters', 'position',[1 1 12 16], 'paperpositionmode', 'auto' )
+
 g.draw();
 figName = "LearningProgress_"+bt.Subject(1);
 %% Save
